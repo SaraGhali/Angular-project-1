@@ -56,17 +56,4 @@ export class Products {
   showDetails(product: IProduct) {
     alert(`ID: ${product.ID}\nName: ${product.Name}\nQuantity: ${product.Quantity}\nPrice: $${product.Price}`);
   }
-
-  getQuantityStatus(quantity: number): string {
-    switch (true) {
-      case quantity === 0:
-        return 'Out of stock';
-      case quantity === 1:
-        return 'Last one item';
-      case quantity === 2:
-        return 'Last two items';
-      default:
-        return 'In stock';
-    }
-  }
 }
