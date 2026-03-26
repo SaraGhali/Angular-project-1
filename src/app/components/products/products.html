@@ -1,0 +1,30 @@
+<div class="container mt-4">
+  <h1 class="mb-4">{{ store.Name }}</h1>
+  <img [src]="store.Logo" alt="Store Logo" class="img-fluid mb-3 border-rounded" style="max-width: 150px;">
+  <p class="mb-4">Store Owner: {{ StoreOwner }}</p>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input [(ngModel)]="searchTerm" placeholder="Search by product name" type="text" class="form-control">
+    </div>
+  </div>
+
+  <div class="row">
+    @for (product of filteredProducts; track product.ID) {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img [src]="product.Img" alt="Product Image" class="card-img-top">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ product.Name }}</h5>
+            <p class="card-text">Price: ${{ product.Price }}</p>
+            <p class="card-text">Quantity: {{ product.Quantity }} ({{ getQuantityStatus(product.Quantity) }})</p>
+            <div class="mt-auto">
+              <button (click)="buy(product)" [disabled]="product.Quantity === 0" class="btn btn-primary me-2">Buy</button>
+              <button (click)="showDetails(product)" class="btn btn-secondary">Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
