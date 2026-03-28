@@ -1,0 +1,20 @@
+h1 {
+  color: #333;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 1rem;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  color: #667eea;
+  font-weight: bold;
+}
+
+ul {
+  list-style-position: inside;
+  line-height: 1.8;
+}

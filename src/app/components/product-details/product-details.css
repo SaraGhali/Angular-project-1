@@ -98,3 +98,31 @@
 .modal-footer button {
   margin-left: 10px;
 }
+
+/* Page View Styles */
+.product-details {
+  margin-top: 1.5rem;
+}
+
+.product-details p {
+  margin-bottom: 1rem;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-lg {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+

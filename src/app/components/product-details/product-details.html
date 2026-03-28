@@ -1,9 +1,10 @@
-<div class="modal-overlay">
+<!-- Modal View -->
+<div *ngIf="isModal" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
       <h2>Product Details</h2>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" *ngIf="product">
       <div class="card mb-3">
         <div class="row g-0">
           <div class="col-md-4">
@@ -39,3 +40,48 @@
   </div>
 </div>
 
+<!-- Page View -->
+<div *ngIf="!isModal" class="container my-5">
+  <div *ngIf="product">
+    <button class="btn btn-secondary mb-4" (click)="goBack()">← Back to Products</button>
+    
+    <div class="card shadow-lg">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img [src]="product.Img" alt="Product Image" class="img-fluid rounded-start h-100" style="object-fit: cover;">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h1 class="card-title">{{ product.Name }}</h1>
+            <div class="product-details">
+              <p class="fs-5"><strong>Price:</strong> {{ product.Price | currency }}</p>
+              <p class="fs-5"><strong>Quantity in Stock:</strong> 
+                <span *ngIf="product.Quantity > 0" class="text-success">{{ product.Quantity }} available</span>
+                <span *ngIf="product.Quantity === 0" class="text-danger">Out of Stock</span>
+              </p>
+              <p class="fs-5"><strong>Category ID:</strong> {{ product.CategoryID }}</p>
+            </div>
+            <div class="mt-4">
+              <button 
+                *ngIf="product.Quantity > 0" 
+                class="btn btn-primary btn-lg"
+                (click)="buy(product)">
+                Buy Now
+              </button>
+              <button 
+                *ngIf="product.Quantity === 0" 
+                class="btn btn-secondary btn-lg" 
+                disabled>
+                Out of Stock
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!product" class="alert alert-warning" role="alert">
+    Product not found.
+  </div>
+</div>

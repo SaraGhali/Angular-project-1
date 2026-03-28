@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-header',
   imports: [CommonModule, RouterModule],
-  templateUrl: './home.html',
-  styleUrl: './home.css',
+  templateUrl: './header.html',
+  styleUrl: './header.css',
   standalone: true
 })
-export class Home {}
+export class Header {}
