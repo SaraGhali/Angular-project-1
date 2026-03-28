@@ -8,39 +8,23 @@
             <input [(ngModel)]="searchTerm" placeholder="Search by product name" type="text" class="form-control">
         </div>
     </div>
-
-    <div class="row">
+    <div class="row my-2">
+         @if (currentDate) {
+          <p class="card-text"><small>current Date : {{ currentDate | date:'short' }}</small></p>
+        }
+        @if (creditCardNumber) {
+          <p class="card-text"><small>Card: {{ creditCardNumber | creditCardFormat }}</small></p>
+        }
+    </div>
+    <div class="row my -2">
         @for (product of filteredProducts; track product.ID) {
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img [src]="product.Img" alt="Product Image" class="card-img-top">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ product.Name }}</h5>
-                    <p class="card-text">Price: ${{ product.Price }}</p>
-                    <p class="card-text">Quantity: {{ product.Quantity }} </p>
-                    @switch (product.Quantity) {
-                      @case (0) {
-                        <p class="text-danger">out of stock</p>
-                      }
-                      @case (1) {
-                        <p class="text-warning">last one item</p>
-                      }
-                      @case (2) {
-                        <p class="text-warning">last two items</p>
-                      }
-                      @default {
-                        <p class="text-success">in stock</p>
-                      }
-                    }
-                    <div class="mt-auto">
-                        <button (click)="buy(product)" [disabled]="product.Quantity === 0"
-                            class="btn btn-primary me-2">Buy</button>
-                        <button (click)="showDetails(product)" class="btn btn-secondary">Details</button>
-                    </div>
-                </div>
-            </div>
+            <app-product-card [product]="product" (buyProduct)="buy($event)"
+                (showProductDetails)="showDetails($event)"></app-product-card>
         </div>
         }
     </div>
 
-  
+    @if (selectedProduct) {
+    <app-product-details [product]="selectedProduct" (closeDetails)="closeDetails()"></app-product-details>
+    }
