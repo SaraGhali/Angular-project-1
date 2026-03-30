@@ -1,0 +1,106 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">User Login</h2>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="login()" class="mb-4">
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email *</label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="Enter your email"
+                [class.is-valid]="emailControl?.valid && emailControl?.touched"
+                [class.is-invalid]="emailControl?.invalid && emailControl?.touched"
+              />
+
+              @if (emailControl?.invalid && emailControl?.touched) {
+                <div class="invalid-feedback">
+                  {{ getEmailError() }}
+                </div>
+              } @else if (emailControl?.valid && emailControl?.touched) {
+                <div class="valid-feedback">
+                  Email looks good
+                </div>
+              }
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password *</label>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Enter your password"
+                [class.is-valid]="passwordControl?.valid && passwordControl?.touched"
+                [class.is-invalid]="passwordControl?.invalid && passwordControl?.touched"
+              />
+
+              @if (passwordControl?.invalid && passwordControl?.touched) {
+                <div class="invalid-feedback">
+                  {{ getPasswordError() }}
+                </div>
+              } @else if (passwordControl?.valid && passwordControl?.touched) {
+                <div class="valid-feedback">
+                  Password looks good
+                </div>
+              }
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary flex-grow-1">
+                Login
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="clearAll()">
+                Reset
+              </button>
+            </div>
+          </form>
+
+          <!-- Success Card -->
+          @if (loggedInUser) {
+            <div class="card bg-light border-success mt-4">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Login Successful!</h5>
+              </div>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-sm-4">
+                    <strong>Email:</strong>
+                  </div>
+                  <div class="col-sm-8">
+                    {{ loggedInUser.email }}
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-sm-4">
+                    <strong>Password:</strong>
+                  </div>
+                  <div class="col-sm-8">
+                    ••••••••
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" (click)="clearAll()">
+                  Log Out
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
