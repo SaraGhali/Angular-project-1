@@ -1,0 +1,271 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+
+                <!-- Card Header -->
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">User Registration</h2>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- Registration Form -->
+                    <form [formGroup]="registerForm" (ngSubmit)="register()" class="mb-4">
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name *</label>
+                            <input
+                                type="text"
+                                id="fullName"
+                                class="form-control"
+                                formControlName="fullName"
+                                placeholder="Enter your full name"
+                                [class.is-valid]="fullNameControl?.valid && fullNameControl?.touched"
+                                [class.is-invalid]="fullNameControl?.invalid && fullNameControl?.touched"
+                            />
+
+                            @if (fullNameControl?.invalid && fullNameControl?.touched) {
+                                <div class="invalid-feedback">
+                                    {{ getFullNameError() }}
+                                </div>
+                            } @else if (fullNameControl?.valid && fullNameControl?.touched) {
+                                <div class="valid-feedback">
+                                    Full Name is valid ✓
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control"
+                                formControlName="email"
+                                placeholder="Enter your email"
+                                [class.is-valid]="emailControl?.valid && emailControl?.touched"
+                                [class.is-invalid]="emailControl?.invalid && emailControl?.touched"
+                            />
+
+                            @if (emailControl?.invalid && emailControl?.touched) {
+                                <div class="invalid-feedback">
+                                    {{ getEmailError() }}
+                                </div>
+                            } @else if (emailControl?.valid && emailControl?.touched) {
+                                <div class="valid-feedback">
+                                    Email is valid ✓
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Mobile Numbers (Dynamic FormArray) -->
+                        <div class="mb-3">
+                            <label class="form-label">Mobile Number(s) *</label>
+
+                            <div formArrayName="mobileNumbers">
+                                @for (control of mobileNumbersControl.controls; let i = $index; track i) {
+                                    <div class="mb-2">
+
+                                        <!-- Input + Remove Button -->
+                                        <div class="d-flex gap-2">
+                                            <input
+                                                type="text"
+                                                class="form-control flex-grow-1"
+                                                [formControl]="$any(control)"
+                                                placeholder="+201XXXXXXXXX"
+                                                [class.is-valid]="control.valid && control.touched"
+                                                [class.is-invalid]="control.invalid && control.touched"
+                                            />
+
+                                            @if (mobileNumbersControl.length > 1) {
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-danger"
+                                                    (click)="removeMobileNumber(i)"
+                                                >
+                                                    Remove
+                                                </button>
+                                            }
+                                        </div>
+
+                                        <!-- Validation Messages -->
+                                        @if (control.invalid && control.touched) {
+                                            <div class="text-danger small mt-1">
+                                                {{ getMobileError(i) }}
+                                            </div>
+                                        } @else if (control.valid && control.touched) {
+                                            <div class="text-success small mt-1">
+                                                Mobile Number is valid ✓
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Add Mobile Button (outside the loop, cleaner) -->
+                            <button
+                                type="button"
+                                class="btn btn-outline-success btn-sm mt-1"
+                                (click)="addMobileNumber()"
+                            >
+                                + Add Another Mobile Number
+                            </button>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password *</label>
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-control"
+                                formControlName="password"
+                                placeholder="Enter your password"
+                                [class.is-valid]="passwordControl?.valid && passwordControl?.touched"
+                                [class.is-invalid]="passwordControl?.invalid && passwordControl?.touched"
+                            />
+
+                            @if (passwordControl?.invalid && passwordControl?.touched) {
+                                <div class="invalid-feedback">
+                                    {{ getPasswordError() }}
+                                </div>
+                            } @else if (passwordControl?.valid && passwordControl?.touched) {
+                                <div class="valid-feedback">
+                                    Password is valid ✓
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                class="form-control"
+                                formControlName="confirmPassword"
+                                placeholder="Re-enter your password"
+                                [class.is-valid]="
+                                    confirmPasswordControl?.valid &&
+                                    !registerForm.hasError('passwordMismatch') &&
+                                    confirmPasswordControl?.touched
+                                "
+                                [class.is-invalid]="
+                                    (confirmPasswordControl?.invalid || registerForm.hasError('passwordMismatch')) &&
+                                    confirmPasswordControl?.touched
+                                "
+                            />
+
+                            @if (
+                                (confirmPasswordControl?.invalid || registerForm.hasError('passwordMismatch')) &&
+                                confirmPasswordControl?.touched
+                            ) {
+                                <div class="invalid-feedback">
+                                    {{ getConfirmPasswordError() }}
+                                </div>
+                            } @else if (
+                                confirmPasswordControl?.valid &&
+                                !registerForm.hasError('passwordMismatch') &&
+                                confirmPasswordControl?.touched
+                            ) {
+                                <div class="valid-feedback">
+                                    Passwords match ✓
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Form Buttons -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                Register
+                            </button>
+                            <button type="button" class="btn btn-secondary" (click)="clearAll()">
+                                Reset
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- ================================ -->
+                    <!-- Success Card (After Registration) -->
+                    <!-- ================================ -->
+                    @if (registeredUser) {
+                        <div class="card border-success mt-4">
+                            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">✅ Registration Successful!</h5>
+                            </div>
+
+                            <div class="card-body bg-light">
+
+                                <!-- Full Name -->
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>Full Name:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {{ registeredUser.fullName }}
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>Email:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {{ registeredUser.email }}
+                                    </div>
+                                </div>
+
+                                <!-- Mobile Numbers -->
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong>Mobile Number(s):</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        @for (mobile of registeredUser.mobileNumbers; let i = $index; track i) {
+                                            <div class="mb-1">
+                                                📱 {{ mobile }}
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Password (Hidden for security) -->
+                                <div class="row mb-4">
+                                    <div class="col-sm-4">
+                                        <strong>Password:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <span class="text-muted">••••••••</span>
+                                    </div>
+                                </div>
+
+                                <!-- Register Another User Button -->
+                                <button
+                                    type="button"
+                                    class="btn btn-primary w-100"
+                                    (click)="clearAll()"
+                                >
+                                    Register Another User
+                                </button>
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <!-- end card-body -->
+
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end container -->
