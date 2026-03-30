@@ -11,32 +11,22 @@ import { ProductsService } from '../../services/productsService';
   styleUrl: './product-details.css',
   standalone: true
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent {
   @Input() product?: IProduct;
   @Output() closeDetails = new EventEmitter();
 
   private productsService = inject(ProductsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  isModal = false;
-
-  ngOnInit() {
-    // Check if this is a routed component
-    this.route.params.subscribe(params => {
-      if (params['id']) {
-        const id = +params['id'];
-        this.product = this.productsService.getProductById(id);
-        this.isModal = false;
-        if (!this.product) {
-          this.router.navigate(['/products']);
-        }
-      } else if (this.product) {
-        // This is modal mode
-        this.isModal = true;
-      }
-    });
+  
+  constructor(){
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.product = this.productsService.getProductById(id);
+    }
+    
   }
-
+  
   onClose() {
     this.closeDetails.emit();
   }
