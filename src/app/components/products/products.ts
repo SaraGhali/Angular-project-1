@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '../../Models/Store';
@@ -15,7 +15,7 @@ import { ProductsService } from '../../services/productsService';
   templateUrl: './products.html',
   styleUrl: './products.css',
 })
-export class Products {
+export class Products implements OnChanges {
   store: Store = {
     Name: 'My Store',
     Branches: ['Branch1', 'Branch2'],
@@ -26,24 +26,27 @@ export class Products {
   currentDate: Date = new Date();
   creditCardNumber: string = '1234567890123456';
 
-
   private productsService = inject(ProductsService);
   ProductList: IProduct[] = [];
-  
+  filteredProducts: IProduct[] = [];
+
   categories: ICategory[] = [
     { ID: 1, Name: 'Old Books' },
     { ID: 2, Name: 'New Books' },
   ];
 
-  searchTerm: string = '';
+  @Input() searchTerm: string = '';
   selectedProduct: IProduct | null = null;
 
   constructor() {
     this.ProductList = this.productsService.getProducts();
+    this.filteredProducts = this.ProductList;
   }
 
-  get filteredProducts(): IProduct[] {
-    return this.productsService.searchProducts(this.searchTerm);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['searchTerm']) {
+      this.filteredProducts = this.productsService.searchProducts(this.searchTerm);
+    }
   }
 
   buy(product: IProduct) {

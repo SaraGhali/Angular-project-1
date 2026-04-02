@@ -2,35 +2,15 @@
   <div class="container">
     <h1 class="display-4 fw-bold">Welcome to My Store</h1>
     <p class="lead mt-3">Your trusted online bookstore for all kinds of books</p>
-    <a routerLink="/products" class="btn btn-primary btn-lg mt-4">Browse Products</a>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-6">
+        <input [(ngModel)]="searchTerm" placeholder="Search by product name" type="text" class="form-control form-control-lg shadow-sm">
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="container my-5">
-  <div class="row">
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">🚀 Fast Delivery</h5>
-          <p class="card-text">Quick and reliable delivery to your doorstep</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">💳 Secure Payment</h5>
-          <p class="card-text">Safe and secure payment methods</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">😊 Best Prices</h5>
-          <p class="card-text">Competitive prices on all products</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container mt-4">
+  <app-products [searchTerm]="searchTerm"></app-products>
 </div>

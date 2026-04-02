@@ -2,12 +2,6 @@
     <h1 class="mb-4">{{ store.Name }}</h1>
     <img [src]="store.Logo" alt="Store Logo" class="img-fluid mb-3 border-rounded" style="max-width: 150px;">
     <p class="mb-4">Store Owner: {{ StoreOwner }}</p>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input [(ngModel)]="searchTerm" placeholder="Search by product name" type="text" class="form-control">
-        </div>
-    </div>
     <div class="row my-2">
          @if (currentDate) {
           <p class="card-text"><small>current Date : {{ currentDate | date:'short' }}</small></p>
