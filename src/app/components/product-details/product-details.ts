@@ -11,7 +11,7 @@ import { ProductsService } from '../../services/productsService';
   styleUrl: './product-details.css',
   standalone: true
 })
-export class ProductDetailsComponent {
+export class ProductDetailsComponent implements OnInit {
   @Input() product?: IProduct;
   @Output() closeDetails = new EventEmitter();
 
@@ -19,12 +19,16 @@ export class ProductDetailsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   
-  constructor(){
+  constructor(){}
+
+  ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.product = this.productsService.getProductById(id);
+      this.productsService.getProductById(id).subscribe({
+        next: (data) => this.product = data,
+        error: (err) => console.error('Error fetching product details:', err)
+      });
     }
-    
   }
   
   onClose() {
@@ -39,3 +43,4 @@ export class ProductDetailsComponent {
     this.productsService.buy(product);
   }
 }
+

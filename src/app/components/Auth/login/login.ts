@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -6,6 +6,9 @@ import {
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +18,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.css'
 })
 export class Login {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
+
   loginForm!: FormGroup;
-  loggedInUser: any = null;
 
   constructor() {
     this.initializeForm();
@@ -49,25 +55,28 @@ export class Login {
       return;
     }
 
-    this.loggedInUser = {
+    const credentials = {
       email: this.emailControl?.value,
       password: this.passwordControl?.value
     };
 
-    console.log('Logged In User:', this.loggedInUser);
-
-    this.resetForm();
+    this.authService.login(credentials).subscribe({
+      next: (response) => {
+        this.toastr.success('Login successful', 'Success');
+        this.router.navigate(['/products']);
+      },
+      error: (err) => {
+        this.toastr.error('Login failed. Please check your credentials.', 'Error');
+        console.error('Login error:', err);
+      }
+    });
   }
 
   resetForm(): void {
     this.loginForm.reset();
   }
 
-  clearAll(): void {
-    this.resetForm();
-    this.loggedInUser = null;
-  }
-
+  // Helper methods for template
   getEmailError(): string {
     if (this.emailControl?.hasError('required')) {
       return 'Email is required';

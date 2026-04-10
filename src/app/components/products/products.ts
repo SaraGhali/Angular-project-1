@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '../../Models/Store';
@@ -15,7 +15,7 @@ import { ProductsService } from '../../services/productsService';
   templateUrl: './products.html',
   styleUrl: './products.css',
 })
-export class Products implements OnChanges {
+export class Products implements OnInit, OnChanges {
   store: Store = {
     Name: 'My Store',
     Branches: ['Branch1', 'Branch2'],
@@ -30,22 +30,38 @@ export class Products implements OnChanges {
   ProductList: IProduct[] = [];
   filteredProducts: IProduct[] = [];
 
-  categories: ICategory[] = [
-    { ID: 1, Name: 'Old Books' },
-    { ID: 2, Name: 'New Books' },
-  ];
+  // These could also be fetched from API if needed
+  categories: ICategory[] = [];
 
   @Input() searchTerm: string = '';
   selectedProduct: IProduct | null = null;
 
-  constructor() {
-    this.ProductList = this.productsService.getProducts();
-    this.filteredProducts = this.ProductList;
+  constructor() {}
+
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.productsService.getProducts().subscribe({
+      next: (data) => {
+        this.ProductList = data;
+        this.filteredProducts = data;
+      },
+      error: (err) => console.error('Error fetching products:', err)
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchTerm']) {
-      this.filteredProducts = this.productsService.searchProducts(this.searchTerm);
+    if (changes['searchTerm'] && !changes['searchTerm'].firstChange) {
+      if (!this.searchTerm.trim()) {
+        this.filteredProducts = this.ProductList;
+      } else {
+        this.productsService.searchProducts({ title: this.searchTerm }).subscribe({
+          next: (data) => this.filteredProducts = data,
+          error: (err) => console.error('Error searching products:', err)
+        });
+      }
     }
   }
 
@@ -61,3 +77,4 @@ export class Products implements OnChanges {
     this.selectedProduct = null;
   }
 }
+

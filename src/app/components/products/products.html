@@ -11,7 +11,7 @@
         }
     </div>
     <div class="row my -2">
-        @for (product of filteredProducts; track product.ID) {
+        @for (product of filteredProducts; track product.id) {
         <div class="col-md-4 mb-4">
             <app-product-card [product]="product" (buyProduct)="buy($event)"
                 (showProductDetails)="showDetails($event)"></app-product-card>

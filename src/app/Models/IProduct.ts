@@ -1,8 +1,11 @@
+import { ICategory } from './ICategory';
+
 export interface IProduct {
-  ID: number;
-  Name: string;
-  Quantity: number;
-  Price: number;
-  Img: string;
-  CategoryID: number;
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  images: string[];
+  category: ICategory;
+  quantity?: number; // Optional as it might be used in cart logic
 }
